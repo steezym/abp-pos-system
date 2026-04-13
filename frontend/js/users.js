@@ -14,9 +14,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const btnConfirmDelete = document.getElementById('btnConfirmDelete');
     const deleteModal = document.getElementById('deleteModal');
 
-    let bsUserModal, bsDeleteModal;
+    let bsUserModal, bsDeleteModal, bsResetModal, bsResetResultModal;
     if (userModal) bsUserModal = new bootstrap.Modal(userModal);
     if (deleteModal) bsDeleteModal = new bootstrap.Modal(deleteModal);
+
+    const resetPasswordModal = document.getElementById('resetPasswordModal');
+    const resetResultModal = document.getElementById('resetResultModal');
+    const btnConfirmReset = document.getElementById('btnConfirmReset');
+    if (resetPasswordModal) bsResetModal = new bootstrap.Modal(resetPasswordModal);
+    if (resetResultModal) bsResetResultModal = new bootstrap.Modal(resetResultModal);
 
     // Load users
     loadUsers();
@@ -172,6 +178,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     <td><span class="badge-status badge-${user.status}">${capitalizeFirst(user.status)}</span></td>
                     <td>${formattedDate}</td>
                     <td class="text-center">
+                        <button class="btn-action btn-reset-pw" onclick="confirmResetPassword(${user.id}, '${escapeHtml(user.name)}')" title="Reset Password">
+                            <i class="bi bi-key-fill"></i>
+                        </button>
                         <button class="btn-action btn-edit" onclick="editUser(${user.id})" title="Edit">
                             <i class="bi bi-pencil"></i>
                         </button>
@@ -220,6 +229,55 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('deleteUserName').textContent = `Apakah Anda yakin ingin menghapus "${userName}"?`;
         bsDeleteModal.show();
     };
+
+    // Confirm reset password
+    window.confirmResetPassword = function (userId, userName) {
+        document.getElementById('resetUserId').value = userId;
+        document.getElementById('resetUserName').textContent = `Apakah Anda yakin ingin mereset password "${userName}"?`;
+        bsResetModal.show();
+    };
+
+    // Reset password confirmation handler
+    if (btnConfirmReset) {
+        btnConfirmReset.addEventListener('click', async function () {
+            const userId = document.getElementById('resetUserId').value;
+            const btnText = btnConfirmReset.querySelector('.btn-text');
+            const btnLoader = btnConfirmReset.querySelector('.btn-loader');
+
+            btnConfirmReset.disabled = true;
+            btnText.classList.add('d-none');
+            btnLoader.classList.remove('d-none');
+
+            try {
+                const data = await api.post(`/users/${userId}/reset-password`);
+                bsResetModal.hide();
+
+                // Show result modal with new password
+                document.getElementById('newPasswordDisplay').textContent = data.data.new_password;
+                bsResetResultModal.show();
+            } catch (error) {
+                alert(error.data?.message || 'Gagal mereset password');
+            } finally {
+                btnConfirmReset.disabled = false;
+                btnText.classList.remove('d-none');
+                btnLoader.classList.add('d-none');
+            }
+        });
+    }
+
+    // Copy password to clipboard
+    const btnCopyPassword = document.getElementById('btnCopyPassword');
+    if (btnCopyPassword) {
+        btnCopyPassword.addEventListener('click', function () {
+            const pw = document.getElementById('newPasswordDisplay').textContent;
+            navigator.clipboard.writeText(pw).then(() => {
+                btnCopyPassword.innerHTML = '<i class="bi bi-check-lg"></i>';
+                setTimeout(() => {
+                    btnCopyPassword.innerHTML = '<i class="bi bi-clipboard"></i>';
+                }, 2000);
+            });
+        });
+    }
 
     // Reset form
     function resetForm() {

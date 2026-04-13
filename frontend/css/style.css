@@ -642,6 +642,68 @@ a { text-decoration: none; color: inherit; }
     margin: 0 auto;
 }
 
+/* Reset Access */
+.reset-access-icon {
+    width: 48px;
+    height: 48px;
+    background: #fef9c3;
+    color: #ca8a04;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    margin: 0 auto;
+}
+
+.reset-success-icon {
+    width: 48px;
+    height: 48px;
+    background: #d1fae5;
+    color: #059669;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    margin: 0 auto;
+}
+
+.btn-reset-pw {
+    color: #ca8a04;
+}
+
+.btn-reset-pw:hover {
+    color: #a16207;
+    background: #fef9c3;
+}
+
+.new-password-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #f9fafb;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin: 0 auto;
+    max-width: 220px;
+}
+
+.new-password-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: 1px;
+}
+
+.btn-copy-pw {
+    padding: 2px 6px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+}
+
 /* ============================================
    COMING SOON
    ============================================ */

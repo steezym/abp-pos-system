@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -150,6 +151,30 @@ class UserController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Pengguna berhasil dihapus',
+        ]);
+    }
+
+    /**
+     * Reset user password to a new random password
+     */
+    public function resetPassword(Request $request, User $user)
+    {
+        // Generate a new random password
+        $newPassword = Str::random(8);
+
+        $user->update([
+            'password' => $newPassword,
+        ]);
+
+        // Revoke all tokens so user must login again
+        $user->tokens()->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Password berhasil direset',
+            'data' => [
+                'new_password' => $newPassword,
+            ]
         ]);
     }
 }

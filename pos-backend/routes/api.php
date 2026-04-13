@@ -16,6 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // User Management
     Route::apiResource('users', UserController::class);
+    Route::post('/users/{user}/reset-password', [UserController::class, 'resetPassword']);
 
     // Products
     Route::apiResource('products', ProductController::class);
