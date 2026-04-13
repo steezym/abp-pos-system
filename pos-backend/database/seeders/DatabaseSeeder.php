@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Product;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,7 +17,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'Budi Santoso',
             'email' => 'admin@toko.com',
-            'password' => 'password',
+            'password' => bcrypt('password'),
             'role' => 'admin',
             'status' => 'aktif',
         ]);
@@ -25,7 +26,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'Ahmad Rizki',
             'email' => 'ahmad.rizki@toko.com',
-            'password' => 'password',
+            'password' => bcrypt('password'),
             'role' => 'manager',
             'status' => 'aktif',
         ]);
@@ -33,7 +34,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'Rina Kusuma',
             'email' => 'rina.kusuma@toko.com',
-            'password' => 'password',
+            'password' => bcrypt('password'),
             'role' => 'manager',
             'status' => 'aktif',
         ]);
@@ -42,7 +43,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'Siti Aminah',
             'email' => 'siti.aminah@toko.com',
-            'password' => 'password',
+            'password' => bcrypt('password'),
             'role' => 'kasir',
             'status' => 'aktif',
         ]);
@@ -50,7 +51,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'Dewi Lestari',
             'email' => 'dewi.lestari@toko.com',
-            'password' => 'password',
+            'password' => bcrypt('password'),
             'role' => 'kasir',
             'status' => 'aktif',
         ]);
@@ -58,7 +59,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'Andi Wijaya',
             'email' => 'andi.wijaya@toko.com',
-            'password' => 'password',
+            'password' => bcrypt('password'),
             'role' => 'kasir',
             'status' => 'nonaktif',
         ]);
@@ -66,7 +67,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'Faisal Rahman',
             'email' => 'faisal.rahman@toko.com',
-            'password' => 'password',
+            'password' => bcrypt('password'),
             'role' => 'kasir',
             'status' => 'aktif',
         ]);
@@ -74,9 +75,37 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'Lisa Anggraini',
             'email' => 'lisa.anggraini@toko.com',
-            'password' => 'password',
+            'password' => bcrypt('password'),
             'role' => 'kasir',
             'status' => 'aktif',
+        ]);
+
+        // Sample products
+        Product::create([
+            'name' => 'Teh Botol',
+            'category' => 'Minuman',
+            'stock' => 100,
+            'min_stock' => 50,
+            'price' => 2900,
+            'image' => 'products/1776013197_teh_botol.jpg'
+        ]);
+
+        Product::create([
+            'name' => 'Aqua',
+            'category' => 'Minuman',
+            'stock' => 40,
+            'min_stock' => 100,
+            'price' => 3500,
+            'image' => 'products/1776013144_aqua.jpg'
+        ]);
+
+        Product::create([
+            'name' => 'Banana Pudding',
+            'category' => 'Makanan',
+            'stock' => 0,
+            'min_stock' => 10,
+            'price' => 20000,
+            'image' => 'products/1776013226_banana_pudding.jpg'
         ]);
     }
 }
