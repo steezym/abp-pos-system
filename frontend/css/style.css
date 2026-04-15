@@ -595,6 +595,10 @@ a { text-decoration: none; color: inherit; }
     padding: 1rem 1.25rem;
 }
 
+.transaction-modal-header {
+    border-bottom: none;
+}
+
 .modal-title {
     font-weight: 600;
     font-size: 1rem;
@@ -622,6 +626,18 @@ a { text-decoration: none; color: inherit; }
 .modal-body .form-select:focus {
     border-color: #999;
     box-shadow: none;
+}
+
+.transaction-modal-body ul li {
+    font-size: 14px;
+}
+
+.transaction-modal-body ul li .key {
+    color: #828282;
+}
+
+.transaction-modal-body ul li:not(:last-child) {
+    margin-bottom: 20px;
 }
 
 .modal-footer {
