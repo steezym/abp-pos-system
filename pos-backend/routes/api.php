@@ -3,6 +3,8 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\TransactionController;
+use App\Http\Controllers\Api\CartController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
@@ -20,4 +22,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Products
     Route::apiResource('products', ProductController::class);
+
+    // Transaction Management
+    Route::get('/cart', [CartController::class, 'get']);
+    Route::post('/cart', [CartController::class, 'insert']);
+    Route::put('/cart/{id}', [CartController::class, 'update']);
+    Route::delete('/cart/{id}', [CartController::class, 'delete']);
+    Route::get('/transaction', [TransactionController::class, 'get']);
+    Route::get('/transaction/{id}', [TransactionController::class, 'show']);
+    Route::post('/transaction', [TransactionController::class, 'insert']);
 });

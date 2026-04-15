@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Transaction;
+use App\Models\ProductTransaction;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -107,5 +109,102 @@ class DatabaseSeeder extends Seeder
             'price' => 20000,
             'image' => 'products/1776013226_banana_pudding.jpg'
         ]);
+
+        Transaction::create([
+            'quantity'=>'4',
+            'total'=>'47000',
+            'date'=>'2026-04-12',
+            'time'=>'09:51:42',
+            'payment_method'=>'QRIS',
+        ]);
+
+        Transaction::create([
+            'quantity'=>'1',
+            'total'=>'20000',
+            'date'=>'2026-04-13',
+            'time'=>'10:57:42',
+            'payment_method'=>'QRIS',
+        ]);
+
+        Transaction::create([
+            'quantity'=>'3',
+            'total'=>'43500',
+            'date'=>'2026-04-13',
+            'time'=>'11:00:36',
+            'payment_method'=>'QRIS',
+        ]);
+
+        Transaction::create([
+            'quantity'=>'2',
+            'total'=>'23500',
+            'date'=>'2026-04-14',
+            'time'=>'11:01:20',
+            'payment_method'=>'Cash',
+        ]);
+
+        Transaction::create([
+            'quantity'=>'4',
+            'total'=>'80000',
+            'date'=>'2026-04-15',
+            'time'=>'11:05:41',
+            'payment_method'=>'QRIS',
+        ]);
+
+        ProductTransaction::create([
+            'transaction_id'=>1,
+            'product_id'=>3,
+            'quantity'=>2,
+            'price'=>20000,
+        ]);
+
+        ProductTransaction::create([
+            'transaction_id'=>1,
+            'product_id'=>2,
+            'quantity'=>2,
+            'price'=>3500,
+        ]);
+
+        ProductTransaction::create([
+            'transaction_id'=>2,
+            'product_id'=>3,
+            'quantity'=>1,
+            'price'=>20000,
+        ]);
+
+        ProductTransaction::create([
+            'transaction_id'=>3,
+            'product_id'=>3,
+            'quantity'=>2,
+            'price'=>20000,
+        ]);
+
+        ProductTransaction::create([
+            'transaction_id'=>3,
+            'product_id'=>2,
+            'quantity'=>1,
+            'price'=>3500,
+        ]);
+
+        ProductTransaction::create([
+            'transaction_id'=>4,
+            'product_id'=>3,
+            'quantity'=>1,
+            'price'=>20000,
+        ]);
+
+        ProductTransaction::create([
+            'transaction_id'=>4,
+            'product_id'=>2,
+            'quantity'=>1,
+            'price'=>3500,
+        ]);
+
+        ProductTransaction::create([
+            'transaction_id'=>5,
+            'product_id'=>3,
+            'quantity'=>4,
+            'price'=>20000,
+        ]);
+
     }
 }
