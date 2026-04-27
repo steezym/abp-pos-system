@@ -153,6 +153,45 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ============================================
+    Dashboard
+   ============================================*/
+
+.chart-section{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;   
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.chart-header{
+    display:flex;
+    padding: 1.25rem;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
+.chart-judul{
+    font-size: 1.5rem;
+    font-weight: 400;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.chart-btn-group{
+    display: flex;
+    gap: 1rem;
+}
+
+.chart{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+/* ============================================
    APP LAYOUT
    ============================================ */
 .app-page {
