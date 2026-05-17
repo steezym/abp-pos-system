@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Route;
 // Public routes
 Route::post('/login', [AuthController::class, 'login']);
 
+// Public product route (Tugas Week 11 - accessible without auth)
+Route::resource('product', ProductController::class);
+
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
     // Auth
@@ -20,7 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('users', UserController::class);
     Route::post('/users/{user}/reset-password', [UserController::class, 'resetPassword']);
 
-    // Products
+    // Products (protected)
     Route::apiResource('products', ProductController::class);
 
     // Transaction Management
