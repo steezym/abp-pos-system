@@ -19,9 +19,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 
-    // User Management
-    Route::apiResource('users', UserController::class);
-    Route::post('/users/{user}/reset-password', [UserController::class, 'resetPassword']);
+    // User Management (Admin & Manager only)
+    Route::middleware('admin')->group(function () {
+        Route::apiResource('users', UserController::class);
+        Route::post('/users/{user}/reset-password', [UserController::class, 'resetPassword']);
+    });
 
     // Products (protected)
     Route::apiResource('products', ProductController::class);

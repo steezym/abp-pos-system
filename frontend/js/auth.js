@@ -14,6 +14,12 @@
         window.location.href = 'index.html';
         return;
     }
+
+    const user = api.getUser();
+    if (currentPage === 'users.html' && user && user.role === 'kasir') {
+        window.location.href = 'index.html';
+        return;
+    }
 })();
 
 // Shared functions for authenticated pages
@@ -27,6 +33,12 @@ function initAppShell() {
 
     if (userNameEl) userNameEl.textContent = user.name;
     if (userRoleEl) userRoleEl.textContent = user.role.charAt(0).toUpperCase() + user.role.slice(1);
+
+    // Hide users menu if Kasir
+    if (user.role === 'kasir') {
+        const usersNav = document.querySelector('li[data-page="users"]');
+        if (usersNav) usersNav.style.display = 'none';
+    }
 
     // Sidebar toggle (mobile)
     const sidebarOpen = document.getElementById('sidebarOpen');

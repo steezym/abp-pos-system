@@ -13,10 +13,10 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->user()->role !== 'admin') {
+        if (!in_array($request->user()->role, ['admin', 'manager'])) {
             return response()->json([
                 'success' => false,
-                'message' => 'Akses ditolak. Hanya admin yang dapat mengakses.',
+                'message' => 'Akses ditolak. Hanya Admin dan Manager yang dapat mengakses.',
             ], 403);
         }
 
