@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,13 +11,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css?v=2">
 </head>
+
 <body class="login-page">
     <div class="login-container">
         <div class="login-box">
             <!-- Header -->
             <div class="login-header">
-                <p class="login-logo">Logo</p>
-                <h1 class="login-title">Monitor System</h1>
+                <img src="images/logo.png" alt="Flow" class="login-logo-img"
+                    style="max-height: 80px; width: auto; display: block; margin: 0 auto 1rem;">
+                <h2 class="login-title">Monitor System</h2>
                 <p class="login-subtitle">Authorized Access Only</p>
             </div>
 
@@ -28,18 +31,28 @@
             <!-- Form Card -->
             <div class="login-card">
                 <form id="loginForm" novalidate>
-                    <div class="mb-3">
+                    <div class="mb-4">
                         <label for="email" class="form-label">Username</label>
-                        <input type="email" class="form-control" id="email" placeholder="" required autocomplete="email">
-                        <div class="invalid-feedback">Masukkan email yang valid</div>
+                        <div class="input-icon-wrapper">
+                            <i class="bi bi-person"></i>
+                            <input type="email" class="form-control with-icon" id="email"
+                                placeholder="Enter your username" required autocomplete="email">
+                        </div>
+                        <div class="invalid-feedback">Masukkan username/email yang valid</div>
                     </div>
 
-                    <div class="mb-3">
-                        <div class="d-flex justify-content-between align-items-center">
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
                             <label for="password" class="form-label mb-0">Password</label>
-                            <a href="#" class="reset-link" data-bs-toggle="modal" data-bs-target="#resetAccessModal">Reset access?</a>
+                            <a href="#" class="reset-link" data-bs-toggle="modal"
+                                data-bs-target="#resetAccessModal">Reset access?</a>
                         </div>
-                        <input type="password" class="form-control" id="password" placeholder="" required autocomplete="current-password">
+                        <div class="input-icon-wrapper">
+                            <i class="bi bi-lock"></i>
+                            <input type="password" class="form-control with-icon pe-5" id="password"
+                                placeholder="Enter your password" required autocomplete="current-password">
+                            <i class="bi bi-eye toggle-password"></i>
+                        </div>
                         <div class="invalid-feedback">Password wajib diisi</div>
                     </div>
 
@@ -52,11 +65,17 @@
                     </button>
                 </form>
             </div>
+
+            <!-- Footer Text -->
+            <div class="mt-4 text-center" style="font-size: 0.8rem; color: #9ca3af;">
+                <i class="bi bi-shield-check me-1"></i> Secure system. All activities are monitored.
+            </div>
         </div>
     </div>
 
     <!-- Reset Access Modal -->
-    <div class="modal fade" id="resetAccessModal" tabindex="-1" aria-labelledby="resetAccessModalLabel" aria-hidden="true">
+    <div class="modal fade" id="resetAccessModal" tabindex="-1" aria-labelledby="resetAccessModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
                 <div class="modal-body text-center py-4">
@@ -64,7 +83,9 @@
                         <i class="bi bi-shield-lock-fill"></i>
                     </div>
                     <h5 class="mt-3" style="font-size: 1rem; font-weight: 600;">Reset Access</h5>
-                    <p class="text-muted small mb-0">Jika Anda lupa kredensial, silakan hubungi <strong>Administrator</strong> untuk mereset password Anda.</p>
+                    <p class="text-muted small mb-0">Jika Anda lupa kredensial, silakan hubungi
+                        <strong>Administrator</strong> untuk mereset password Anda.
+                    </p>
                     <div class="mt-3">
                         <button class="btn btn-dark btn-sm px-4" data-bs-dismiss="modal">Mengerti</button>
                     </div>
@@ -78,4 +99,5 @@
     <script src="js/auth.js"></script>
     <script src="js/login.js"></script>
 </body>
+
 </html>

@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <td>${formattedDate}</td>
                     <td class="text-center">
                         <button class="btn-action btn-reset-pw" onclick="confirmResetPassword(${user.id}, '${escapeHtml(user.name)}')" title="Reset Password">
-                            <i class="bi bi-key-fill"></i>
+                            <i class="bi bi-key"></i>
                         </button>
                         <button class="btn-action btn-edit" onclick="editUser(${user.id})" title="Edit">
                             <i class="bi bi-pencil"></i>

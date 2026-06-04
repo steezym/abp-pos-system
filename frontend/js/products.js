@@ -123,27 +123,41 @@ document.addEventListener('DOMContentLoaded', async function () {
         const image = document.getElementById('inputImage').files[0];
         if (image) formData.append('image', image);
 
-        if (id) {
-            formData.append('_method', 'PUT');
+        try {
+            let res;
+            if (id) {
+                formData.append('_method', 'PUT');
+                res = await fetch(`${CONFIG.API_BASE_URL}/products/${id}`, {
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${api.getToken()}`
+                    },
+                    body: formData
+                });
+            } else {
+                res = await fetch(`${CONFIG.API_BASE_URL}/products`, {
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${api.getToken()}`
+                    },
+                    body: formData
+                });
+            }
 
-            await fetch(`${CONFIG.API_BASE_URL}/products/${id}`, {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${api.getToken()}`
-                },
-                body: formData
-            });
-        } else {
-            await fetch(`${CONFIG.API_BASE_URL}/products`, {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${api.getToken()}`
-                },
-                body: formData
-            });
+            if (!res.ok) {
+                const errData = await res.json();
+                console.error("API Error:", errData);
+                alert("Gagal menyimpan produk: " + (errData.message || JSON.stringify(errData)));
+                return;
+            }
+
+            location.reload();
+        } catch (error) {
+            console.error("Network/Client Error:", error);
+            alert("Terjadi kesalahan sistem saat menyimpan produk.");
         }
-
-        location.reload();
     });
 
     window.editProduct = async function (id) {

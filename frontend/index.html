@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,12 +12,13 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
+
 <body class="app-page">
     <div class="app-layout">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <span class="sidebar-brand">Nama Produk + logo</span>
+                <img src="images/logo.png" alt="Logo" class="sidebar-brand-img">
                 <button class="sidebar-close d-lg-none" id="sidebarClose">
                     <i class="bi bi-x-lg"></i>
                 </button>
@@ -80,8 +82,11 @@
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><span class="dropdown-item-text fw-semibold" id="userName">Budi Santoso</span></li>
                             <li><span class="dropdown-item-text text-muted small" id="userRole">Admin</span></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#" id="btnLogoutMenu"><i class="bi bi-box-arrow-left me-2"></i>Logout</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#" id="btnLogoutMenu"><i
+                                        class="bi bi-box-arrow-left me-2"></i>Logout</a></li>
                         </ul>
                     </div>
                 </div>
@@ -133,25 +138,25 @@
                         <div id="myPlot" style="width:100%"></div>
 
                         <script>
-                        const xArray = ['2026-10-04', '2026-10-05', '2026-10-06','2026-10-07','2026-10-08'];
-                        const yArray = [500000,1000000,1203924,923500,1238000];
-                        
-                        // Define Data
-                        const data = [{
-                            x: xArray,
-                            y: yArray,
-                            type:"scatter"
-                        }];
-                        
-                        // Define Layout
-                        const layout = {
-                            xaxis: {title: "Tanggal"},
-                            yaxis: {title: "Rp"},  
-                            title: "Omset"
-                        };
-                        
-                        // Display using Plotly
-                        Plotly.newPlot("myPlot", data, layout);
+                            const xArray = ['2026-10-04', '2026-10-05', '2026-10-06', '2026-10-07', '2026-10-08'];
+                            const yArray = [500000, 1000000, 1203924, 923500, 1238000];
+
+                            // Define Data
+                            const data = [{
+                                x: xArray,
+                                y: yArray,
+                                type: "scatter"
+                            }];
+
+                            // Define Layout
+                            const layout = {
+                                xaxis: { title: "Tanggal" },
+                                yaxis: { title: "Rp" },
+                                title: "Omset"
+                            };
+
+                            // Display using Plotly
+                            Plotly.newPlot("myPlot", data, layout);
                         </script>
                     </div>
                 </div>
@@ -186,7 +191,7 @@
 
             </div>
 
-            
+
         </main>
     </div>
 
@@ -212,4 +217,5 @@
     <script src="js/transactions.js"></script>
     <script src="js/products.js"></script>
 </body>
+
 </html>

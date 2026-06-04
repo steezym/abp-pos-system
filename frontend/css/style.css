@@ -36,7 +36,7 @@ a { text-decoration: none; color: inherit; }
    ============================================ */
 .login-page {
     min-height: 100vh;
-    background: #ffffff;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 50%, #f3f4f6 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -44,7 +44,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 .login-container {
-    background: #ffffff;
+    background: transparent;
     border: none;
     width: 100%;
     max-width: 780px;
@@ -56,12 +56,12 @@ a { text-decoration: none; color: inherit; }
 
 .login-box {
     width: 100%;
-    max-width: 380px;
+    max-width: 420px;
     text-align: center;
 }
 
 .login-header {
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
 }
 
 .login-logo {
@@ -72,65 +72,100 @@ a { text-decoration: none; color: inherit; }
 }
 
 .login-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0.25rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.35rem;
+    letter-spacing: -0.5px;
 }
 
 .login-subtitle {
-    font-size: 0.85rem;
-    color: var(--text-muted);
+    font-size: 0.95rem;
+    color: #9ca3af;
+    font-weight: 400;
 }
 
 .login-card {
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    padding: 1.75rem 0;
+    background: #ffffff;
+    border: 1px solid #f0f0f0;
+    border-radius: 16px;
+    padding: 2.5rem 2.25rem;
     text-align: left;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
 }
 
 .login-card .form-label {
     font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--text-primary);
+    font-weight: 600;
+    color: #374151;
     margin-bottom: 0.4rem;
 }
 
 .login-card .form-control {
-    border: 1px solid #d1d5db;
+    border: 1px solid #e5e7eb;
     border-radius: 8px;
-    padding: 10px 12px;
-    font-size: 0.9rem;
+    padding: 12px 14px;
+    font-size: 0.95rem;
+    color: #111827;
 }
 
 .login-card .form-control:focus {
-    border-color: #999;
-    box-shadow: none;
+    border-color: #d1d5db;
+    box-shadow: 0 0 0 4px rgba(243, 244, 246, 1);
+}
+
+.input-icon-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon-wrapper i:first-child {
+    position: absolute;
+    left: 14px;
+    color: #9ca3af;
+    font-size: 1.1rem;
+    pointer-events: none;
+}
+
+.input-icon-wrapper .with-icon {
+    padding-left: 42px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 14px;
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+
+.toggle-password:hover {
+    color: #6b7280;
 }
 
 .reset-link {
-    font-size: 0.75rem;
-    color: var(--text-muted);
+    font-size: 0.8rem;
+    color: #6b7fb5;
     text-decoration: none;
+    font-weight: 400;
 }
 
 .reset-link:hover {
-    color: var(--text-secondary);
+    color: #4a6a9e;
 }
 
 .btn-login {
     width: 100%;
-    padding: 11px;
+    padding: 13px;
     background: #111827;
     color: white;
     border: none;
     border-radius: 8px;
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
-    margin-top: 0.5rem;
+    margin-top: 1rem;
     transition: background 0.2s;
 }
 
@@ -224,6 +259,12 @@ a { text-decoration: none; color: inherit; }
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.sidebar-brand-img {
+    width: 160px;
+    height: 40px;
+    object-fit: contain;
 }
 
 .sidebar-brand {
@@ -701,8 +742,8 @@ a { text-decoration: none; color: inherit; }
 .reset-access-icon {
     width: 48px;
     height: 48px;
-    background: #fef9c3;
-    color: #ca8a04;
+    background: #f3f4f6;
+    color: var(--text-secondary);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -725,12 +766,12 @@ a { text-decoration: none; color: inherit; }
 }
 
 .btn-reset-pw {
-    color: #ca8a04;
+    color: var(--text-muted);
 }
 
 .btn-reset-pw:hover {
-    color: #a16207;
-    background: #fef9c3;
+    color: var(--text-primary);
+    background: #f3f4f6;
 }
 
 .new-password-box {
@@ -799,6 +840,11 @@ a { text-decoration: none; color: inherit; }
    RESPONSIVE
    ============================================ */
 @media (max-width: 991.98px) {
+    .sidebar-brand-img {
+        width: 120px;
+        height: 32px;
+    }
+
     .sidebar {
         transform: translateX(-100%);
     }
@@ -825,6 +871,11 @@ a { text-decoration: none; color: inherit; }
 }
 
 @media (max-width: 767.98px) {
+    .sidebar-brand-img {
+        width: 96px;
+        height: 28px;
+    }
+
     .login-container {
         border: none;
         background: transparent;
