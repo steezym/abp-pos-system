@@ -14,7 +14,8 @@ class Product extends Model
     'stock',
     'min_stock',
     'price',
-    'image'
+    'image',
+    'is_active'
     ];
 
     public $timestamps = false;

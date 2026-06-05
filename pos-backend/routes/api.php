@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
@@ -36,4 +37,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/transaction', [TransactionController::class, 'get']);
     Route::get('/transaction/{id}', [TransactionController::class, 'show']);
     Route::post('/transaction', [TransactionController::class, 'insert']);
+
+    Route::post(
+    '/mobile-checkout',
+    [TransactionController::class,
+     'mobileCheckout']
+
+     
+);
+Route::get('/notifications', [NotificationController::class, 'index']);
+Route::post('/notifications/read/{id}', [NotificationController::class, 'markRead']);
 });

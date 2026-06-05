@@ -1,11 +1,13 @@
+console.log("PRODUCT JS LOADED");
 document.addEventListener('DOMContentLoaded', async function () {
+    console.log("NOTIF INIT");
     initAppShell();
 
     const tableBody = document.getElementById('productsTableBody');
     const form = document.getElementById('productForm');
     const res = await api.get('/products');
-    renderProducts(res);
-    updateStats(res);
+    renderProducts(res.list);
+    updateStats(res.list);
     let allProducts = [];
     loadProducts();
 
@@ -21,9 +23,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     async function loadProducts() {
+        console.log("PRODUCT LOAD");
         try {
             const res = await api.get('/products');
-            allProducts = res;
+            allProducts = res.list;
             applyFilter();
         } catch (err) {
             tableBody.innerHTML = `<tr><td colspan="7">Gagal load data</td></tr>`;

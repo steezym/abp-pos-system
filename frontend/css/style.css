@@ -917,3 +917,82 @@ a { text-decoration: none; color: inherit; }
     font-size: 0.85rem;
     margin: 0;
 }
+
+.notification-wrapper{
+    position:relative;
+}
+
+.notif-badge{
+    position:absolute;
+    top:-4px;
+    right:-4px;
+
+    width:18px;
+    height:18px;
+
+    border-radius:50%;
+
+    background:#dc3545;
+    color:white;
+
+    font-size:11px;
+    font-weight:600;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.notif-dropdown{
+
+    display:none;
+
+    position:absolute;
+
+    top:50px;
+    right:0;
+
+    width:350px;
+
+    background:white;
+
+    border-radius:12px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.15);
+
+    z-index:9999;
+
+    max-height:400px;
+
+    overflow-y:auto;
+}
+
+.notif-dropdown.show{
+    display:block;
+}
+
+.notif-header{
+    padding:15px;
+    border-bottom:1px solid #eee;
+    font-weight:600;
+}
+
+.notif-item{
+    padding:12px 15px;
+    border-bottom:1px solid #f2f2f2;
+    cursor:pointer;
+}
+
+.notif-item:hover{
+    background:#f8f9fa;
+}
+
+.notif-title{
+    font-weight:600;
+}
+
+.notif-message{
+    font-size:13px;
+    color:#6c757d;
+}

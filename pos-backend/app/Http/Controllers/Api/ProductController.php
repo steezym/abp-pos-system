@@ -9,9 +9,21 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     public function index()
-    {
-        return response()->json(['list' => Product::all()]);
-    }
+{
+    $products = Product::where('is_active', true)
+        ->get()
+        ->map(function ($product) {
+
+            $product->image_url =
+                url('storage/' . $product->image);
+
+            return $product;
+        });
+
+    return response()->json([
+        'list' => $products
+    ]);
+}
 
     public function store(Request $request)
     {
@@ -65,8 +77,24 @@ class ProductController extends Controller
     }
 
     public function destroy($id)
-    {
-        Product::destroy($id);
-        return response()->json(['message' => 'Deleted']);
+{
+    try {
+
+        $product = Product::findOrFail($id);
+
+        $product->is_active = false;
+        $product->save();
+
+        return response()->json([
+            'message' => 'Product deactivated'
+        ]);
+
+    } catch (\Exception $e) {
+
+        return response()->json([
+            'error' => $e->getMessage()
+        ], 500);
+
     }
+}
 }
