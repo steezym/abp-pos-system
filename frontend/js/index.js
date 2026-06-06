@@ -268,7 +268,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             const todayRevenue = todayData ? todayData.value : 0;
             const todayTransaction = todayData ? todayData.volume :0;
 
-            document.getElementById('statTodayRevenue').innerText = formatRupiah(todayRevenue);
+            document.getElementById('statTodayRevenue').innerText = formatRupiah(Number(todayRevenue));
             document.getElementById('statTodayTransaction').innerText = todayTransaction;
 
         } catch (error) {
