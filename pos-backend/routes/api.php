@@ -35,6 +35,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/cart/{id}', [CartController::class, 'update']);
     Route::delete('/cart/{id}', [CartController::class, 'delete']);
     Route::get('/transaction', [TransactionController::class, 'get']);
+    Route::get('/transaction/dailysum', [TransactionController::class, 'dailysum']);
+    Route::get('/transaction/weeklysum', [TransactionController::class, 'weeklysum']);
     Route::get('/transaction/{id}', [TransactionController::class, 'show']);
     Route::post('/transaction', [TransactionController::class, 'insert']);
 
