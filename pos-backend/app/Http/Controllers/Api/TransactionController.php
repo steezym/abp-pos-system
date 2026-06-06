@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\Transaction;
 use Carbon\Carbon;
-use App\Models\Notification;
+
 
 class TransactionController extends Controller
 {
@@ -41,6 +42,94 @@ class TransactionController extends Controller
                     "min"=>$tr_min,
                 ]
             ]
+        ]);
+    }
+
+    public function dailysum(Request $request) {
+        $validated = $request->validate([
+            'start' => 'required|date',
+            'end'   => 'required|date|after_or_equal:start',
+        ]);
+
+        $dailySummary = Transaction::select(
+                DB::raw('DATE(date) as period'),
+                DB::raw('COUNT(*) as volume'),
+                DB::raw('SUM(total) as value')
+            )
+            ->whereBetween(
+                DB::raw('DATE(date)'),
+                [$validated['start'], $validated['end']]
+            )
+            ->groupBy('period')
+            ->orderBy('period')
+            ->get()
+            ->keyBy('period');
+
+        // generate all dates in range and fill missing with 0
+        $start = Carbon::parse($validated['start']);
+        $end = Carbon::parse($validated['end']);
+        $allDates = [];
+
+        for ($date = $start; $date->lte($end); $date->addDay()) {
+            $period = $date->toDateString();
+            $allDates[] = [
+                'period' => $period,
+                'volume' => $dailySummary[$period]->volume ?? 0,
+                'value'  => $dailySummary[$period]->value ?? 0,
+            ];
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $allDates
+        ]);
+    }
+
+    public function weeklysum(Request $request) {
+        $validated = $request->validate([
+            'start' => 'required|date',
+            'end'   => 'required|date|after_or_equal:start',
+        ]);
+
+        $data = Transaction::select(
+                DB::raw('YEAR(date) as year'),
+                DB::raw('WEEK(date, 1) as week'),
+                DB::raw('COUNT(*) as volume'),
+                DB::raw('SUM(total) as value')
+            )
+            ->whereBetween(DB::raw('DATE(date)'), [$validated['start'], $validated['end']])
+            ->groupBy('year', 'week')
+            ->orderBy('year')
+            ->orderBy('week')
+            ->get()
+            ->keyBy(function ($item) {
+                return $item->year . '-' . $item->week; // ← key by "year-week"
+            });
+
+        // generate all weeks in range and fill missing with 0
+        $start = Carbon::parse($validated['start']);
+        $end = Carbon::parse($validated['end']);
+        $allWeeks = [];
+
+        $current = $start->copy()->startOfWeek();
+
+        while ($current->lte($end)) {
+            $year = $current->year;
+            $week = $current->weekOfYear;
+            $key  = $year . '-' . $week;
+
+            $allWeeks[] = [
+                'period' => 'Week ' . $week . ' ' . $year, // ← added year to avoid ambiguity
+                'volume' => $data[$key]->volume ?? 0,
+                'value'  => $data[$key]->value  ?? 0,
+            ];
+
+            $current->addWeek();
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data'   => $allWeeks
         ]);
     }
 
@@ -90,96 +179,6 @@ class TransactionController extends Controller
         return response()->json([
             "status"=>"success",
             "data"=>$tr
-        ]);
-    }
-
-    public function mobileCheckout(Request $request) {
-        $items = $request->items;
-
-        $total = 0;
-        $qty = 0;
-
-        $tr = Transaction::create([
-            'quantity' => 0,
-            'total' => 0,
-            'date' => now()->format('Y-m-d'),
-            'time' => now()->format('H:i:s'),
-            'payment_method' => $request->payment_method
-        ]);
-
-        foreach ($items as $item) {
-
-            $product = Product::findOrFail(
-                $item['product_id']
-            );
-
-            if ($product->stock < $item['quantity']) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Stock not enough'
-                ],400);
-            }
-
-            $tr->products()->attach(
-                $product->id,
-                [
-                    'quantity' => $item['quantity'],
-                    'price' => $product->price
-                ]
-            );
-
-            $product->decrement(
-                'stock',
-                $item['quantity']
-            );
-
-            $product->refresh();
-
-            if ($product->stock == 0) {
-
-                Notification::create([
-                    'type' => 'out_of_stock',
-                    'title' => 'Produk Habis',
-                    'message' => $product->name . ' telah habis',
-                    'product_id' => $product->id
-                ]);
-            }
-
-            elseif (
-                $product->stock <=
-                $product->min_stock
-            ) {
-
-                Notification::create([
-                    'type' => 'low_stock',
-                    'title' => 'Stok Menipis',
-                    'message' =>
-                        $product->name .
-                        ' tersisa '
-                        . $product->stock,
-                    'product_id' => $product->id
-                ]);
-            }
-            $qty += $item['quantity'];
-
-            $total +=
-                $product->price *
-                $item['quantity'];
-        }
-
-        $tr->update([
-            'quantity'=>$qty,
-            'total'=>$total
-        ]);
-
-        Notification::create([
-            'type' => 'transaction',
-            'title' => 'Transaksi Baru',
-            'message' => 'Transaksi berhasil sebesar Rp ' . number_format($total, 0, ',', '.')
-        ]);
-
-        return response()->json([
-            'status'=>'success'
         ]);
     }
 }
