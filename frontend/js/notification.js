@@ -340,30 +340,50 @@ setInterval(async () => {
             notifications.length > 0
         ) {
 
-            const latest =
-                notifications[0];
+            const newNotifications =
+    notifications.filter(
+        n => n.id > lastNotificationId
+    );
 
-            if (
-    latest.id >
-    lastNotificationId
+if (
+    newNotifications.length > 0
 ) {
 
     lastNotificationId =
-        latest.id;
+        Math.max(
+            ...newNotifications.map(
+                n => n.id
+            )
+        );
 
-    if (
-        latest.type === 'low_stock' ||
-        latest.type === 'out_of_stock'
-    ) {
+    newNotifications.forEach(
+        notif => {
 
-        notificationManager
-            .showRealtimeAlert(
-                latest
-            );
-    }
+            if (
+                notif.type ===
+                    'low_stock' ||
+                notif.type ===
+                    'out_of_stock'
+            ) {
+
+                notificationManager
+                    .showRealtimeAlert(
+                        notif
+                    );
+            }
+        }
+    );
 
     notificationManager.load();
+
+    if (
+        typeof window.loadProducts ===
+        'function'
+    ) {
+        window.loadProducts();
+    }
 }
+            
         }
 
     } catch(error) {

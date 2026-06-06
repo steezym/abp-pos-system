@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     renderProducts(res.list);
     updateStats(res.list);
     let allProducts = [];
-    loadProducts();
 
     // PREVIEW IMAGE
     document.getElementById('inputImage').addEventListener('change', function () {
@@ -49,16 +48,34 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     });
 
-    async function loadProducts() {
+    window.loadProducts = async function() {
+
         console.log("PRODUCT LOAD");
+
         try {
-            const res = await api.get('/products');
-            allProducts = res.list;
+
+            const res =
+                await api.get(
+                    '/products'
+                );
+
+            allProducts =
+                res.list;
+
             applyFilter();
+
         } catch (err) {
-            tableBody.innerHTML = `<tr><td colspan="7">Gagal load data</td></tr>`;
+
+            tableBody.innerHTML =
+                `<tr>
+                    <td colspan="7">
+                        Gagal load data
+                    </td>
+                </tr>`;
+
         }
     }
+    await window.loadProducts();
 
     function getStatus(stock, min) {
         if (stock == 0) return `<span class="text-danger">Out of Stock</span>`;
@@ -244,7 +261,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
 
-            loadProducts();
+            window.loadProducts();
 
         } catch (error) {
         console.error("Gagal hapus:", error);
