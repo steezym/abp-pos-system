@@ -5,6 +5,33 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     const tableBody = document.getElementById('productsTableBody');
     const form = document.getElementById('productForm');
+    document
+    .getElementById(
+        'btnAddProduct'
+    )
+    .addEventListener(
+        'click',
+        () => {
+
+            form.reset();
+
+            document.getElementById(
+                'productId'
+            ).value = '';
+
+            document.getElementById(
+                'inputStock'
+            ).value = '';
+
+            document.getElementById(
+                'inputStock'
+            ).disabled = false;
+
+            document.getElementById(
+                'previewImage'
+            ).style.display = 'none';
+        }
+    );
     const res = await api.get('/products');
     renderProducts(res.list);
     updateStats(res.list);
@@ -69,11 +96,25 @@ document.addEventListener('DOMContentLoaded', async function () {
                 ${getStatus(p.stock, p.min_stock)}
             </td>
             <td class="text-center">
-                <button class="btn-action btn-edit" onclick="editProduct(${p.id})">
+                <button class="btn-action btn-edit"
+                    onclick="editProduct(${p.id})">
+
                     <i class="bi bi-pencil"></i>
+
                 </button>
-                <button class="btn-action btn-delete" onclick="openDeleteModal(${p.id}, '${p.name}')">
+
+                <button class="btn-action"
+                    onclick="openRestockModal(${p.id})">
+
+                    <i class="bi bi-box-seam"></i>
+
+                </button>
+
+                <button class="btn-action btn-delete"
+                    onclick="openDeleteModal(${p.id}, '${p.name}')">
+
                     <i class="bi bi-trash"></i>
+
                 </button>
             </td>
         </tr>
@@ -169,7 +210,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.getElementById('productId').value = p.id;
         document.getElementById('inputName').value = p.name;
         document.getElementById('inputCategory').value = p.category;
-        document.getElementById('inputStock').value = p.stock;
+        const stockElement = document.getElementById('inputStock').value = p.stock;
+        document.getElementById('inputStock').disabled = true;
         document.getElementById('inputMinStock').value = p.min_stock;
         document.getElementById('inputPrice').value = p.price;
 
@@ -207,5 +249,52 @@ document.addEventListener('DOMContentLoaded', async function () {
         } catch (error) {
         console.error("Gagal hapus:", error);
         }
+    });
+
+    window.openRestockModal = async function(id){
+        const p =
+        await api.get(
+            `/products/${id}`
+        );
+
+        document.getElementById(
+            'restockProductId'
+        ).value = p.id;
+
+        document.getElementById(
+            'currentStock'
+        ).textContent = p.stock + ' pcs';
+
+        document.getElementById(
+            'restockQty'
+        ).value = '';
+
+        new bootstrap.Modal(
+            document.getElementById(
+                'restockModal'
+            )
+        ).show();
+    }
+
+    document.getElementById('btnSaveRestock').addEventListener('click',async () => {
+
+        const id =
+            document.getElementById(
+            'restockProductId'
+        ).value;
+
+        const qty =
+            document.getElementById(
+            'restockQty'
+        ).value;
+
+        await api.post(
+            `/products/${id}/restock`,
+            {
+                qty: qty
+            }
+        );
+
+        location.reload();
     });
 });

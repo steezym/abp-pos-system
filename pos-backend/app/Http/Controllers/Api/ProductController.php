@@ -97,4 +97,22 @@ class ProductController extends Controller
 
     }
 }
+
+public function restock(
+    Request $request,
+    $id
+)
+{
+    $product =
+        Product::findOrFail($id);
+
+    $product->stock +=
+        (int) $request->qty;
+
+    $product->save();
+
+    return response()->json([
+        'message' => 'Restock success'
+    ]);
+}
 }

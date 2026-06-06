@@ -229,8 +229,15 @@
 
                         <!-- STOCK -->
                         <div class="mb-3">
-                            <label>Stock</label>
-                            <input type="number" class="form-control" id="inputStock" required>
+                            <label>
+                                Current Stock
+                            </label>
+
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="inputStock"
+                                required>
                         </div>
 
                         <!-- MINIMUM STOCK -->
@@ -276,6 +283,93 @@
             </div>
         </div>
     </div>
+
+    <!-- Restock Modal -->
+<div
+    class="modal fade"
+    id="restockModal"
+    tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    Restock Product
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <input
+                    type="hidden"
+                    id="restockProductId">
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Current Stock
+                    </label>
+
+                    <div
+                        id="currentStock"
+                        class="fw-bold fs-4">
+                        0 pcs
+
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Tambah Stock
+                    </label>
+
+                    <input
+                        type="number"
+                        id="restockQty"
+                        class="form-control"
+                        min="1">
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-light"
+                    data-bs-dismiss="modal">
+
+                    Batal
+
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-dark"
+                    id="btnSaveRestock">
+
+                    Simpan
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
     <!-- Coming Soon Toast -->
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
