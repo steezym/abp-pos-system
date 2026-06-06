@@ -17,8 +17,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // load data produk
     try {
+        console.log('load data product')
         const res = await api.get('/products');
-        updateStats(res);
+        updateStats(res.list);
     } catch (err) {
         console.error('Gagal load data:', err);
     }
