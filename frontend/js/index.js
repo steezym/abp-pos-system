@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     let currentMode = 'daily';
     btnHarian.classList.add('active');
     loadTransactions()
-    loadTrendChart('weekly');
+    loadTrendChart('daily');
     loadTodayRevenue();
 
     async function loadTransactions() {
@@ -128,52 +128,41 @@ document.addEventListener('DOMContentLoaded', async function () {
                 y: valueArray,
                 name: 'Omset',
                 type: 'scatter',
-                mode: 'lines+markers',
+                mode: 'lines',
+                fill: 'tozeroy',
                  line: {
+                    color: 'green',
                     shape: 'spline',
-                     smoothing: 1.3
+                     smoothing: 0.7
                 }
             };
 
-            const volumeTrace = {
-                x: xArray,
-                y: volumeArray,
-                 name: 'Volume',
-                 type: 'bar',
-                 yaxis: 'y2'
+            const layout = {
+                title:
+                    mode === 'weekly'
+                        ? 'Trend Penjualan Mingguan'
+                        : 'Trend Penjualan Harian',
+
+                    xaxis: {
+                        title: mode === 'weekly' ? 'Minggu': 'Tanggal',
+                        showgrid:false
+                    },
+
+                    yaxis: {
+                        title: 'Omset (Rp)',
+                        rangemode: 'nonegative',
+                        zeroline: false,
+                        showgrid:false
+                    },
+
+                    legend: {
+                        orientation: 'h'
+                    },
+
+                    margin: {
+                        t: 50
+                    }
                 };
-
-             const layout = {
-                  title:
-                     mode === 'weekly'
-                         ? 'Trend Penjualan Mingguan'
-                          : 'Trend Penjualan Harian',
-
-                  xaxis: {
-                      title:
-                          mode === 'weekly'
-                             ? 'Minggu'
-                             : 'Tanggal'
-                 },
-
-                  yaxis: {
-                       title: 'Omset (Rp)'
-                },
-
-                yaxis2: {
-                    title: 'Jumlah Transaksi',
-                    overlaying: 'y',
-                    side: 'right'
-                },
-
-                legend: {
-                    orientation: 'h'
-                },
-
-                margin: {
-                    t: 50
-                }
-             };
 
             Plotly.newPlot(
                 'myPlot',
