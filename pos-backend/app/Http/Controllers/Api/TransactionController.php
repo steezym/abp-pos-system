@@ -93,8 +93,8 @@ class TransactionController extends Controller
 
         // strftime() digunakan agar kompatibel dengan SQLite
         $data = Transaction::select(
-                DB::raw("strftime('%Y', date) as year"),
-                DB::raw("strftime('%W', date) as week"),
+                DB::raw("YEAR(date) as year"),
+                DB::raw("WEEK(date) as week"),
                 DB::raw('COUNT(*) as volume'),
                 DB::raw('SUM(total) as value')
             )
