@@ -17,27 +17,30 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'username' => 'required|string',
             'password' => 'required',
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        // Cari user di database berdasarkan username
+        $user = User::where('username', $request->username)->first();
 
+        // Jika user tidak ditemukan, ATAU password yang diketik tidak cocok dengan database
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['Email atau password salah.'],
+                'username' => ['Username atau password salah.'],
             ]);
         }
 
         if ($user->status === 'nonaktif') {
             throw ValidationException::withMessages([
-                'email' => ['Akun Anda tidak aktif. Hubungi administrator.'],
+                'username' => ['Akun Anda tidak aktif. Hubungi administrator.'],
             ]);
         }
 
-        // Delete old tokens
+        // Hapus semua token lama agar token yang lama tidak bisa dipakai lagi
         $user->tokens()->delete();
 
+        // Buat "Token" baru (seperti tiket masuk sementara) untuk pengguna ini
         $token = $user->createToken('pos-token')->plainTextToken;
 
         return response()->json([

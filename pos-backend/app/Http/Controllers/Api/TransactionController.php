@@ -91,9 +91,10 @@ class TransactionController extends Controller
             'end'   => 'required|date|after_or_equal:start',
         ]);
 
+        // strftime() digunakan agar kompatibel dengan SQLite
         $data = Transaction::select(
-                DB::raw('YEAR(date) as year'),
-                DB::raw('WEEK(date, 1) as week'),
+                DB::raw("strftime('%Y', date) as year"),
+                DB::raw("strftime('%W', date) as week"),
                 DB::raw('COUNT(*) as volume'),
                 DB::raw('SUM(total) as value')
             )
@@ -103,10 +104,9 @@ class TransactionController extends Controller
             ->orderBy('week')
             ->get()
             ->keyBy(function ($item) {
-                return $item->year . '-' . $item->week; // ← key by "year-week"
+                return $item->year . '-' . $item->week;
             });
 
-        // generate all weeks in range and fill missing with 0
         $start = Carbon::parse($validated['start']);
         $end = Carbon::parse($validated['end']);
         $allWeeks = [];
@@ -114,12 +114,12 @@ class TransactionController extends Controller
         $current = $start->copy()->startOfWeek();
 
         while ($current->lte($end)) {
-            $year = $current->year;
-            $week = $current->weekOfYear;
+            $year = $current->format('Y');
+            $week = $current->format('W');
             $key  = $year . '-' . $week;
 
             $allWeeks[] = [
-                'period' => 'Week ' . $week . ' ' . $year, // ← added year to avoid ambiguity
+                'period' => 'Week ' . $week . ' ' . $year,
                 'volume' => $data[$key]->volume ?? 0,
                 'value'  => $data[$key]->value  ?? 0,
             ];

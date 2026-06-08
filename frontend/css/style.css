@@ -608,9 +608,9 @@ a { text-decoration: none; color: inherit; }
 
 /* Action Buttons */
 .btn-action {
-    width: 30px;
-    height: 30px;
-    border-radius: 6px;
+    width: 26px;
+    height: 26px;
+    border-radius: 5px;
     border: none;
     display: inline-flex;
     align-items: center;
@@ -618,25 +618,29 @@ a { text-decoration: none; color: inherit; }
     cursor: pointer;
     transition: all 0.15s;
     background: transparent;
-    font-size: 0.85rem;
-}
-
-.btn-edit {
-    color: var(--text-muted);
+    font-size: 0.78rem;
+    color: #c0c4cc;
+    margin: 0 1px;
 }
 
 .btn-edit:hover {
-    color: var(--text-primary);
+    color: #374151;
     background: #f3f4f6;
 }
 
 .btn-delete {
-    color: #fca5a5;
+    color: #e5a5a5;
 }
 
 .btn-delete:hover {
     color: #dc2626;
     background: #fef2f2;
+}
+
+.btn-delete-disabled {
+    color: #dde0e4;
+    cursor: not-allowed;
+    opacity: 0.4;
 }
 
 /* Mini Stat Cards */
@@ -766,11 +770,11 @@ a { text-decoration: none; color: inherit; }
 }
 
 .btn-reset-pw {
-    color: var(--text-muted);
+    color: #c0c4cc;
 }
 
 .btn-reset-pw:hover {
-    color: var(--text-primary);
+    color: #374151;
     background: #f3f4f6;
 }
 

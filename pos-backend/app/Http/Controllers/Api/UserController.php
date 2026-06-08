@@ -18,12 +18,12 @@ class UserController extends Controller
     {
         $query = User::query();
 
-        // Search by name or email
+        // Search by name or username
         if ($request->has('search') && $request->search) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                  ->orWhere('username', 'like', "%{$search}%");
             });
         }
 
@@ -62,25 +62,33 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'name'     => 'required|string|max:255',
+            'username' => 'required|string|unique:users,username',
             'password' => 'required|string|min:6',
-            'role' => 'required|in:admin,manager,kasir',
-            'status' => 'required|in:aktif,nonaktif',
+            'role'     => 'required|in:admin,manager,kasir',
+            'status'   => 'required|in:aktif,nonaktif',
         ]);
 
+        // Manager hanya boleh membuat user dengan role kasir
+        if ($request->user()->role === 'manager' && in_array($request->role, ['admin', 'manager'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Manager hanya dapat membuat akun Kasir.',
+            ], 403);
+        }
+
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name'     => $request->name,
+            'username' => $request->username,
             'password' => $request->password,
-            'role' => $request->role,
-            'status' => $request->status,
+            'role'     => $request->role,
+            'status'   => $request->status,
         ]);
 
         return response()->json([
             'success' => true,
             'message' => 'Pengguna berhasil ditambahkan',
-            'data' => $user,
+            'data'    => $user,
         ], 201);
     }
 
@@ -101,26 +109,42 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => [
+            'name'     => 'required|string|max:255',
+            'username' => [
                 'required',
-                'email',
+                'string',
                 Rule::unique('users')->ignore($user->id),
             ],
-            'password' => 'nullable|string|min:6',
-            'role' => 'required|in:admin,manager,kasir',
-            'status' => 'required|in:aktif,nonaktif',
+            'role'     => 'required|in:admin,manager,kasir',
+            'status'   => 'required|in:aktif,nonaktif',
         ]);
 
+        // Manager hanya boleh menetapkan role kasir
+        if ($request->user()->role === 'manager' && in_array($request->role, ['admin', 'manager'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Manager hanya dapat menetapkan role Kasir.',
+            ], 403);
+        }
+
+        // Manager tidak boleh mengedit user yang rolenya admin atau manager
+        if ($request->user()->role === 'manager' && in_array($user->role, ['admin', 'manager'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Manager tidak dapat mengedit akun Admin atau sesama Manager.',
+            ], 403);
+        }
+
         $data = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'role' => $request->role,
-            'status' => $request->status,
+            'name'     => $request->name,
+            'username' => $request->username,
+            'role'     => $request->role,
+            'status'   => $request->status,
         ];
 
-        if ($request->filled('password')) {
-            $data['password'] = $request->password;
+        // Jika status diubah menjadi nonaktif, hapus semua token aktifnya agar ter-logout paksa
+        if ($user->status === 'aktif' && $request->status === 'nonaktif') {
+            $user->tokens()->delete();
         }
 
         $user->update($data);
@@ -128,7 +152,7 @@ class UserController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Pengguna berhasil diperbarui',
-            'data' => $user->fresh(),
+            'data'    => $user->fresh(),
         ]);
     }
 
@@ -145,6 +169,14 @@ class UserController extends Controller
             ], 403);
         }
 
+        // Manager tidak boleh menghapus user yang rolenya admin atau manager
+        if ($request->user()->role === 'manager' && in_array($user->role, ['admin', 'manager'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Manager tidak dapat menghapus akun Admin atau sesama Manager.',
+            ], 403);
+        }
+
         $user->tokens()->delete();
         $user->delete();
 
@@ -155,15 +187,16 @@ class UserController extends Controller
     }
 
     /**
-     * Reset user password to a new random password
+     * Reset user password to a new password provided by Admin
      */
     public function resetPassword(Request $request, User $user)
     {
-        // Generate a new random password
-        $newPassword = Str::random(8);
+        $request->validate([
+            'password' => 'required|string|min:6',
+        ]);
 
         $user->update([
-            'password' => $newPassword,
+            'password' => $request->password,
         ]);
 
         // Revoke all tokens so user must login again
@@ -172,9 +205,6 @@ class UserController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Password berhasil direset',
-            'data' => [
-                'new_password' => $newPassword,
-            ]
         ]);
     }
 }

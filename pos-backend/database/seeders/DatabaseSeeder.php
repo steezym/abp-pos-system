@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         // Admin user
         User::create([
             'name' => 'Budi Santoso',
-            'email' => 'admin@toko.com',
+            'username' => 'admin',
             'password' => bcrypt('password'),
             'role' => 'admin',
             'status' => 'aktif',
@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
         // Manager users
         User::create([
             'name' => 'Ahmad Rizki',
-            'email' => 'ahmad.rizki@toko.com',
+            'username' => 'ahmad',
             'password' => bcrypt('password'),
             'role' => 'manager',
             'status' => 'aktif',
@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
 
         User::create([
             'name' => 'Rina Kusuma',
-            'email' => 'rina.kusuma@toko.com',
+            'username' => 'rina',
             'password' => bcrypt('password'),
             'role' => 'manager',
             'status' => 'aktif',
@@ -44,7 +44,7 @@ class DatabaseSeeder extends Seeder
         // Kasir users
         User::create([
             'name' => 'Siti Aminah',
-            'email' => 'siti.aminah@toko.com',
+            'username' => 'siti',
             'password' => bcrypt('password'),
             'role' => 'kasir',
             'status' => 'aktif',
@@ -52,7 +52,7 @@ class DatabaseSeeder extends Seeder
 
         User::create([
             'name' => 'Dewi Lestari',
-            'email' => 'dewi.lestari@toko.com',
+            'username' => 'dewi',
             'password' => bcrypt('password'),
             'role' => 'kasir',
             'status' => 'aktif',
@@ -60,7 +60,7 @@ class DatabaseSeeder extends Seeder
 
         User::create([
             'name' => 'Andi Wijaya',
-            'email' => 'andi.wijaya@toko.com',
+            'username' => 'andi',
             'password' => bcrypt('password'),
             'role' => 'kasir',
             'status' => 'nonaktif',
@@ -68,7 +68,7 @@ class DatabaseSeeder extends Seeder
 
         User::create([
             'name' => 'Faisal Rahman',
-            'email' => 'faisal.rahman@toko.com',
+            'username' => 'faisal',
             'password' => bcrypt('password'),
             'role' => 'kasir',
             'status' => 'aktif',
@@ -76,7 +76,7 @@ class DatabaseSeeder extends Seeder
 
         User::create([
             'name' => 'Lisa Anggraini',
-            'email' => 'lisa.anggraini@toko.com',
+            'username' => 'lisa',
             'password' => bcrypt('password'),
             'role' => 'kasir',
             'status' => 'aktif',
@@ -111,99 +111,99 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Transaction::create([
-            'quantity'=>'4',
-            'total'=>'47000',
-            'date'=>'2026-04-12',
-            'time'=>'09:51:42',
-            'payment_method'=>'QRIS',
+            'quantity' => '4',
+            'total' => '47000',
+            'date' => '2026-04-12',
+            'time' => '09:51:42',
+            'payment_method' => 'QRIS',
         ]);
 
         Transaction::create([
-            'quantity'=>'1',
-            'total'=>'20000',
-            'date'=>'2026-04-13',
-            'time'=>'10:57:42',
-            'payment_method'=>'QRIS',
+            'quantity' => '1',
+            'total' => '20000',
+            'date' => '2026-04-13',
+            'time' => '10:57:42',
+            'payment_method' => 'QRIS',
         ]);
 
         Transaction::create([
-            'quantity'=>'3',
-            'total'=>'43500',
-            'date'=>'2026-04-13',
-            'time'=>'11:00:36',
-            'payment_method'=>'QRIS',
+            'quantity' => '3',
+            'total' => '43500',
+            'date' => '2026-04-13',
+            'time' => '11:00:36',
+            'payment_method' => 'QRIS',
         ]);
 
         Transaction::create([
-            'quantity'=>'2',
-            'total'=>'23500',
-            'date'=>'2026-04-14',
-            'time'=>'11:01:20',
-            'payment_method'=>'Cash',
+            'quantity' => '2',
+            'total' => '23500',
+            'date' => '2026-04-14',
+            'time' => '11:01:20',
+            'payment_method' => 'Cash',
         ]);
 
         Transaction::create([
-            'quantity'=>'4',
-            'total'=>'80000',
-            'date'=>'2026-04-15',
-            'time'=>'11:05:41',
-            'payment_method'=>'QRIS',
+            'quantity' => '4',
+            'total' => '80000',
+            'date' => '2026-04-15',
+            'time' => '11:05:41',
+            'payment_method' => 'QRIS',
         ]);
 
         ProductTransaction::create([
-            'transaction_id'=>1,
-            'product_id'=>3,
-            'quantity'=>2,
-            'price'=>20000,
+            'transaction_id' => 1,
+            'product_id' => 3,
+            'quantity' => 2,
+            'price' => 20000,
         ]);
 
         ProductTransaction::create([
-            'transaction_id'=>1,
-            'product_id'=>2,
-            'quantity'=>2,
-            'price'=>3500,
+            'transaction_id' => 1,
+            'product_id' => 2,
+            'quantity' => 2,
+            'price' => 3500,
         ]);
 
         ProductTransaction::create([
-            'transaction_id'=>2,
-            'product_id'=>3,
-            'quantity'=>1,
-            'price'=>20000,
+            'transaction_id' => 2,
+            'product_id' => 3,
+            'quantity' => 1,
+            'price' => 20000,
         ]);
 
         ProductTransaction::create([
-            'transaction_id'=>3,
-            'product_id'=>3,
-            'quantity'=>2,
-            'price'=>20000,
+            'transaction_id' => 3,
+            'product_id' => 3,
+            'quantity' => 2,
+            'price' => 20000,
         ]);
 
         ProductTransaction::create([
-            'transaction_id'=>3,
-            'product_id'=>2,
-            'quantity'=>1,
-            'price'=>3500,
+            'transaction_id' => 3,
+            'product_id' => 2,
+            'quantity' => 1,
+            'price' => 3500,
         ]);
 
         ProductTransaction::create([
-            'transaction_id'=>4,
-            'product_id'=>3,
-            'quantity'=>1,
-            'price'=>20000,
+            'transaction_id' => 4,
+            'product_id' => 3,
+            'quantity' => 1,
+            'price' => 20000,
         ]);
 
         ProductTransaction::create([
-            'transaction_id'=>4,
-            'product_id'=>2,
-            'quantity'=>1,
-            'price'=>3500,
+            'transaction_id' => 4,
+            'product_id' => 2,
+            'quantity' => 1,
+            'price' => 3500,
         ]);
 
         ProductTransaction::create([
-            'transaction_id'=>5,
-            'product_id'=>3,
-            'quantity'=>4,
-            'price'=>20000,
+            'transaction_id' => 5,
+            'product_id' => 3,
+            'quantity' => 4,
+            'price' => 20000,
         ]);
 
     }

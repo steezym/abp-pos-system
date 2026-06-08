@@ -20,9 +20,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 
-    // User Management (Admin & Manager only)
+    // User Management
+    // Admin + Manager: lihat daftar, tambah, edit user
     Route::middleware('admin')->group(function () {
-        Route::apiResource('users', UserController::class);
+        Route::get('/users', [UserController::class, 'index']);
+        Route::post('/users', [UserController::class, 'store']);
+        Route::get('/users/{user}', [UserController::class, 'show']);
+        Route::put('/users/{user}', [UserController::class, 'update']);
+    });
+
+    // Admin saja: hapus user dan reset password
+    Route::middleware('admin_only')->group(function () {
+        Route::delete('/users/{user}', [UserController::class, 'destroy']);
         Route::post('/users/{user}/reset-password', [UserController::class, 'resetPassword']);
     });
 
