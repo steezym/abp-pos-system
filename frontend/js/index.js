@@ -90,23 +90,18 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     async function loadTrendChart(mode = 'daily') {
-
         try {
-
             const startDate = startDateInput?.value;
             const endDate = endDateInput?.value;
 
             let params = new URLSearchParams();
 
-            if(startDate && endDate){
+            if (startDate && endDate) {
                 params.append('start', startDate);
                 params.append('end', endDate);
             }
 
-            const queryString =
-                params.toString()
-                    ? `?${params.toString()}`
-                    : '';
+            const queryString = params.toString() ? `?${params.toString()}` : '';
 
             const endpoint =
                 mode === 'weekly'
@@ -114,69 +109,128 @@ document.addEventListener('DOMContentLoaded', async function () {
                     : `/transaction/dailysum${queryString}`;
 
             const response = await api.get(endpoint);
-
             const chartData = response.data;
-
-            console.log(chartData);
 
             const xArray = chartData.map(item => item.period);
             const valueArray = chartData.map(item => item.value);
-            const volumeArray = chartData.map(item => item.volume);
 
-            const omzetTrace = {
-                x: xArray,
-                y: valueArray,
-                name: 'Omset',
-                type: 'scatter',
-                mode: 'lines',
-                fill: 'tozeroy',
-                 line: {
-                    color: 'green',
-                    shape: 'spline',
-                     smoothing: 0.7
+            // Destroy previous chart instance if exists
+            if (window.trendChart instanceof ApexCharts) {
+                window.trendChart.destroy();
+            }
+
+            const options = {
+                chart: {
+                    type: 'area',
+                    height: 350,
+                    toolbar: { show: false },
+                    zoom: { enabled: false },
+                    fontFamily: 'inherit'
+                },
+
+                series: [{
+                    name: 'Omset',
+                    data: valueArray
+                }],
+
+                xaxis: {
+                    categories: xArray,
+                    title: {
+                        text: mode === 'weekly' ? 'Minggu' : 'Tanggal'
+                    },
+                    tickAmount: mode === 'weekly' ? undefined : 8, 
+                    labels: {
+                        rotate: 0,
+                        rotateAlways: false,
+                        hideOverlappingLabels: true
+                    },
+                    
+                    axisBorder: { show: false },
+                    axisTicks: { show: false }
+                },
+
+                yaxis: {
+                    title: { text: 'Omset (Rp)' },
+                    min: 0,
+                    labels: {
+                        formatter: (val) => {
+                            if (val >= 1_000_000) return 'Rp ' + (val / 1_000_000).toFixed(1) + 'jt';
+                            if (val >= 1_000) return 'Rp ' + (val / 1_000).toFixed(0) + 'k';
+                            return 'Rp ' + val;
+                        }
+                    }
+                },
+
+                stroke: {
+                    curve: 'smooth',
+                    width: 2,
+                    colors: ['#16a34a']
+                },
+
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.45,
+                        opacityTo: 0.0,
+                        stops: [0, 100],
+                        colorStops: [{
+                            offset: 0,
+                            color: '#16a34a',
+                            opacity: 0.45
+                        }, {
+                            offset: 100,
+                            color: '#16a34a',
+                            opacity: 0
+                        }]
+                    }
+                },
+
+                colors: ['#16a34a'],
+
+                dataLabels: { enabled: false },
+
+                grid: {
+                    show: false
+                },
+
+                tooltip: {
+                    y: {
+                        formatter: (val) => new Intl.NumberFormat('id-ID', {
+                            style: 'currency',
+                            currency: 'IDR',
+                            minimumFractionDigits: 0
+                        }).format(val)
+                    }
+                },
+
+                title: {
+                    text: mode === 'weekly' ? 'Trend Penjualan Mingguan' : 'Trend Penjualan Harian',
+                    align: 'center',
+                    style: {
+                        fontSize: '16px',
+                        fontWeight: '600'
+                    }
+                },
+
+                legend: {
+                    position: 'top',
+                    horizontalAlign: 'right'
+                },
+
+                markers: {
+                    size: 0,
+                    hover: { size: 5 }
                 }
             };
 
-            const layout = {
-                title:
-                    mode === 'weekly'
-                        ? 'Trend Penjualan Mingguan'
-                        : 'Trend Penjualan Harian',
+            window.trendChart = new ApexCharts(document.getElementById('myPlot'), options);
+            window.trendChart.render();
 
-                    xaxis: {
-                        title: mode === 'weekly' ? 'Minggu': 'Tanggal',
-                        showgrid:false
-                    },
-
-                    yaxis: {
-                        title: 'Omset (Rp)',
-                        rangemode: 'nonegative',
-                        zeroline: false,
-                        showgrid:false
-                    },
-
-                    legend: {
-                        orientation: 'h'
-                    },
-
-                    margin: {
-                        t: 50
-                    }
-                };
-
-            Plotly.newPlot(
-                'myPlot',
-                [omzetTrace],
-                layout,
-                { responsive: true }
-            );
-
-        } catch(error) {
-
+        } catch (error) {
             console.error(error);
-
             document.getElementById('myPlot').innerHTML =
-            '<p class="text-center">Gagal memuat grafik.</p>';
+                '<p class="text-center">Gagal memuat grafik.</p>';
         }
     }
 
