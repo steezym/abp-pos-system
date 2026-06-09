@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\Transaction;
+use App\Models\Notification;
 use Carbon\Carbon;
 
 
@@ -173,6 +174,81 @@ class TransactionController extends Controller
             'message'=>'Transaction successfully created!'
         ], 200);
     }
+
+    public function mobileCheckout(Request $request){
+        $date = Carbon::now();
+
+        $transaction = Transaction::create([
+            "date" => $date->format('Y-m-d'),
+            "time" => $date->toTimeString(),
+            "quantity" => 0,
+            "total" => 0,
+            "payment_method" => $request->payment_method
+        ]);
+
+        foreach ($request->items as $item) {
+
+            $product = Product::find($item['product_id']);
+
+            if (!$product) {
+                continue;
+            }
+
+            if ($product->stock < $item['quantity']) {
+                return response()->json([
+                    "status" => "error",
+                    "message" => "Stock not enough"
+            ], 400);
+        }
+
+            $transaction->products()->attach(
+            $product->id,
+            [
+                "quantity" => $item['quantity'],
+                "price" => $product->price
+            ]
+        );
+
+        $transaction->increment(
+            'quantity',
+            $item['quantity']
+        );
+
+        $transaction->increment(
+            'total',
+            $product->price * $item['quantity']
+        );
+
+        $product->decrement(
+            'stock',
+            $item['quantity']
+        );
+
+        $product->refresh();
+
+        if ($product->stock <= $product->min_stock) {
+
+    Notification::create([
+        'type'       => 'low_stock',
+        'title'      => 'Stok Menipis',
+        'message'    => $product->name . ' tersisa ' . $product->stock,
+        'product_id' => $product->id
+    ]);
+}
+    }
+
+    Notification::create([
+    'type'    => 'transaction',
+    'title'   => 'Transaksi Baru',
+    'message' => 'Transaksi berhasil sebesar Rp ' .
+        number_format($transaction->total, 0, ',', '.')
+    ]);
+
+    return response()->json([
+        "status" => "success",
+        "message" => "Transaction successfully created!"
+    ], 200);
+}
 
     public function show($id) {
         $tr = Transaction::with('products:id,name,price')->where('id',$id)->get();

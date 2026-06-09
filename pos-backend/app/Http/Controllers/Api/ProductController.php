@@ -57,11 +57,13 @@ class ProductController extends Controller
         return $product;
     }
 
+    // Menampilkan detail produk
     public function show($id)
     {
         return Product::findOrFail($id);
     }
 
+    // Mengupdate data produk
     public function update(Request $request, $id)
     {
         $product = Product::findOrFail($id);
@@ -86,6 +88,7 @@ class ProductController extends Controller
         return $product;
     }
 
+    // Menonaktifkan produk
     public function destroy($id)
     {
         try {
