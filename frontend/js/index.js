@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 stroke: {
                     curve: 'smooth',
                     width: 2,
-                    colors: ['#16a34a']
+                    colors: ['#000000']
                 },
 
                 fill: {
@@ -176,11 +176,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                         stops: [0, 100],
                         colorStops: [{
                             offset: 0,
-                            color: '#16a34a',
-                            opacity: 0.45
+                            color: '#000000',
+                            opacity: 0.25
                         }, {
                             offset: 100,
-                            color: '#16a34a',
+                            color: '#000000',
                             opacity: 0
                         }]
                     }
