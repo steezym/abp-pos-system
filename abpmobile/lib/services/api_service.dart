@@ -160,6 +160,27 @@ class ApiService {
     throw 'Gagal memuat data pengguna';
   }
 
+  // RESTOCK PRODUCT
+  static Future<void> restock(int productId, int qty) async {
+    final token = await getToken();
+
+    final res = await http.post(
+      Uri.parse('$baseUrl/product/$productId/restock'),
+      headers: _headers(token: token),
+      body: jsonEncode({'qty': qty}),
+    );
+
+    if (res.statusCode == 401) {
+      await clearAuth();
+      throw 'Sesi Anda telah berakhir. Silakan login kembali.';
+    }
+
+    if (res.statusCode != 200) {
+      final data = jsonDecode(res.body);
+      throw data['message'] ?? 'Gagal restock produk';
+    }
+  }
+
   static Future<List<dynamic>> getProducts() async {
     final token = await getToken();
 
@@ -210,7 +231,7 @@ class ApiService {
     if (res.statusCode == 200) {
       final json = jsonDecode(res.body);
       final data = json['data'];
-      
+
       if (data is Map) {
         return data['transactions'] ?? [];
       } else if (data is List) {
@@ -221,6 +242,7 @@ class ApiService {
 
     throw 'Gagal memuat riwayat transaksi';
   }
+<<<<<<< Updated upstream
 
   // GET AI RECOMMENDATIONS
   static Future<List<dynamic>> getAIRecommendations() async {
@@ -289,4 +311,6 @@ class ApiService {
 
     throw 'Gagal memuat transaksi (Error ${res.statusCode})';
   }
+=======
+>>>>>>> Stashed changes
 }
