@@ -40,6 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Products (protected)
     Route::apiResource('products', ProductController::class);
+    Route::post('/product/{id}/restock', [ProductController::class, 'restock']);
 
     // Transaction Management
     Route::get('/cart', [CartController::class, 'get']);
