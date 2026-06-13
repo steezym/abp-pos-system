@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../config/api_config.dart';
+import 'package:pos_mobile/models/DetailTransaction.dart';
+import 'package:pos_mobile/models/Transaction.dart';
 
 class ApiService {
   static Future<String?> getToken() async {
@@ -237,5 +239,54 @@ class ApiService {
       print('AI Recommendation Error: $e');
     }
     return [];
+  }
+
+  // TRANSACTION NEW SERVICE
+  // GET TRANSASCTIONS
+  static Future<List<Transaction>> getTransactions2({String? search, String? start, String? end}) async {
+    final token = await getToken();
+    var url = '$baseUrl/transaction';
+    final params = <String, String>{};
+    if (search != null && search.isNotEmpty) params['search'] = search;
+    if (start != null && start.isNotEmpty) params['start'] = start;
+    if (end != null && end.isNotEmpty) params['end'] = end;
+    if (params.isNotEmpty) {
+      url += '?' + params.entries.map((e) => '${e.key}=${e.value}').join('&');
+    }
+    final res = await http.get(Uri.parse(url), headers: _headers(token: token));
+    print("hello ${url}");
+    if (res.statusCode == 401) {
+      await clearAuth();
+      throw 'Sesi Anda telah berakhir. Silakan login kembali.';
+    }
+    print(res.body);
+
+    if (res.statusCode == 200) {
+      var data = jsonDecode(res.body);
+      var parsed = data["data"]["transactions"].cast<Map<String, dynamic>>();
+      return parsed.map<Transaction>((item)=>Transaction.fromJson(item)).toList();
+    }
+
+    throw 'Gagal memuat transaksi (Error ${res.statusCode})';
+  }
+
+  // GET TRANSACTION DETAILS
+  static Future<DetailTransaction> getTransactionDetails({String? id}) async {
+    final token = await getToken();
+    var url = '$baseUrl/transaction/${id}';
+
+    final res = await http.get(Uri.parse(url), headers: _headers(token: token));
+
+    if (res.statusCode == 401) {
+      await clearAuth();
+      throw 'Sesi Anda telah berakhir. Silakan login kembali.';
+    }
+
+    if (res.statusCode == 200) {
+      final data = jsonDecode(res.body);
+      return DetailTransaction.fromJson(data["data"][0]);
+    }
+
+    throw 'Gagal memuat transaksi (Error ${res.statusCode})';
   }
 }
