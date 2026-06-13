@@ -14,6 +14,9 @@ Route::post('/login', [AuthController::class, 'login']);
 // Public product route (Tugas Week 11 - accessible without auth)
 Route::resource('product', ProductController::class);
 
+// Public AI Bundling Insights (for mobile upsell)
+Route::get('/transaction/bundling/insights', [TransactionController::class, 'bundlingInsights']);
+
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
     // Auth

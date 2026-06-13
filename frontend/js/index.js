@@ -51,6 +51,33 @@ document.addEventListener('DOMContentLoaded', async function () {
     loadTransactions()
     loadTrendChart('daily');
     loadTodayRevenue();
+    loadAIInsights();
+
+    async function loadAIInsights() {
+        try {
+            const data = await api.get('/transaction/bundling/insights');
+            const insights = data.data;
+            const container = document.getElementById('aiInsightsContent');
+            if (!insights || insights.length === 0) {
+                container.innerHTML = '<p class="m-0 text-muted">Belum cukup data transaksi untuk dianalisis oleh AI.</p>';
+                return;
+            }
+            container.innerHTML = insights.map(item => `
+                <div class="d-flex align-items-center mb-2 p-3 rounded" style="background: var(--bg-page); border: 1px solid var(--border-color);">
+                    <i class="bi bi-lightbulb-fill text-warning me-3 fs-3"></i>
+                    <div>
+                        <div class="fw-semibold" style="color: var(--text-primary); font-size: 0.95rem;">${item.message}</div>
+                        <div class="small mt-1" style="color: var(--text-muted);">
+                            <i class="bi bi-graph-up-arrow me-1"></i> Data Historis: Dibeli bersamaan sebanyak ${item.count} kali (${item.percentage}% dari total histori transaksi)
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        } catch (error) {
+            console.error('Gagal memuat AI insights:', error);
+            document.getElementById('aiInsightsContent').innerHTML = '<p class="m-0 text-danger">Gagal memuat rekomendasi AI.</p>';
+        }
+    }
 
     async function loadTransactions() {
         try {

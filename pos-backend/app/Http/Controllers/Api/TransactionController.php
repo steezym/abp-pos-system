@@ -164,7 +164,19 @@ class TransactionController extends Controller
 
             $tr->increment('quantity', $cart_product->quantity);
             $tr->increment('total',$cart_product->products->price * $cart_product->quantity);
-            Product::find($cart_product->product_id)->decrement('stock',$cart_product->quantity);
+            
+            $product = Product::find($cart_product->product_id);
+            $product->decrement('stock',$cart_product->quantity);
+            $product->refresh();
+
+            if ($product->stock <= $product->min_stock) {
+                Notification::create([
+                    'type'       => 'low_stock',
+                    'title'      => 'Stok Menipis',
+                    'message'    => $product->name . ' tersisa ' . $product->stock,
+                    'product_id' => $product->id
+                ]);
+            }
         }
 
         Cart::where('user_id', $request->user_id)->delete();
@@ -255,6 +267,56 @@ class TransactionController extends Controller
         return response()->json([
             "status"=>"success",
             "data"=>$tr
+        ]);
+    }
+
+    public function bundlingInsights() {
+        $transactions = Transaction::with('products')->get();
+        $pairs = [];
+        
+        foreach($transactions as $transaction) {
+            $products = $transaction->products->pluck('name', 'id')->toArray();
+            $product_ids = array_keys($products);
+            
+            for ($i = 0; $i < count($product_ids); $i++) {
+                for ($j = $i + 1; $j < count($product_ids); $j++) {
+                    $p1 = $product_ids[$i];
+                    $p2 = $product_ids[$j];
+                    
+                    $pair_key = $p1 < $p2 ? $p1.'_'.$p2 : $p2.'_'.$p1;
+                    $pair_name = $p1 < $p2 ? $products[$p1].' & '.$products[$p2] : $products[$p2].' & '.$products[$p1];
+                    
+                    if (!isset($pairs[$pair_key])) {
+                        $pairs[$pair_key] = [
+                            'names' => $pair_name,
+                            'count' => 0
+                        ];
+                    }
+                    $pairs[$pair_key]['count']++;
+                }
+            }
+        }
+        
+        usort($pairs, function($a, $b) {
+            return $b['count'] <=> $a['count'];
+        });
+        
+        $top_pairs = array_slice($pairs, 0, 3);
+        $total_transactions = $transactions->count();
+        
+        $insights = array_map(function($pair) use ($total_transactions) {
+            $percentage = $total_transactions > 0 ? round(($pair['count'] / $total_transactions) * 100, 1) : 0;
+            return [
+                'bundle' => $pair['names'],
+                'count' => $pair['count'],
+                'percentage' => $percentage,
+                'message' => "Promo Bundling: " . $pair['names'] . " sangat potensial karena sering dibeli secara bersamaan."
+            ];
+        }, $top_pairs);
+        
+        return response()->json([
+            'status' => 'success',
+            'data' => $insights
         ]);
     }
 }
