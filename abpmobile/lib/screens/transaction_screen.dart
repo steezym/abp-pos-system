@@ -79,6 +79,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                         ),
                         SizedBox(height: 10),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Container(
                               width: 155,
